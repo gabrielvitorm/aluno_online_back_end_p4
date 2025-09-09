@@ -1,7 +1,11 @@
 package br.com.alunoonline.api.service;
 
+import br.com.alunoonline.api.dtos.AlunoRequestDTO;
+import br.com.alunoonline.api.dtos.AlunoResponseDTO;
+import br.com.alunoonline.api.mapper.AlunoMapper;
 import br.com.alunoonline.api.model.Aluno;
 import br.com.alunoonline.api.repository.AlunoRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -11,46 +15,59 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AlunoServiceImpl {
+@RequiredArgsConstructor
+public class AlunoServiceImpl implements AlunoService{
 
-    @Autowired
-    AlunoRepository alunoRepository;
+    private final AlunoRepository alunoRepository;
+    private final AlunoMapper alunoMapper;
 
-    public void criarAluno(Aluno aluno) {
+    @Override
+    public AlunoResponseDTO criarAluno(AlunoRequestDTO dto) {
+        Aluno aluno = alunoMapper.toEntity(dto);
+
         alunoRepository.save(aluno);
+
+        return alunoMapper.toDTO(aluno);
     }
 
-    public List<Aluno> listarTodosAlunos(){
-        return alunoRepository.findAll();
+    @Override
+    public List<AlunoResponseDTO> listarAlunos() {
+        return alunoRepository.findAll().stream()
+                .map(alunoMapper::toDTO)
+                .toList();
     }
 
-    public Optional<Aluno> buscarAlunoPorId(Long id) {
-        return alunoRepository.findById(id);
+    @Override
+    public AlunoResponseDTO listarAlunoPorId(Long id) {
+        Aluno aluno = alunoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Client not found"));
+
+        return alunoMapper.toDTO(aluno);
     }
 
-    public void atualizarAlunoPorId(Long id, Aluno aluno) {
-        //PRIMEIRO PASSO: VER SE O ALUNO EXISTE NO BD
-        Optional<Aluno> alunoDoBancoDeDados = buscarAlunoPorId(id);
+    @Override
+    public AlunoResponseDTO atualizarAluno(Long id, AlunoRequestDTO dto) {
+        Aluno aluno = alunoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Aluno não encontrado"));
 
-        // E SE NÃO EXISTIR ESSE ALUNO?
-        if (alunoDoBancoDeDados.isEmpty()) {
+        aluno.setNome(dto.nome());
+        aluno.setEmail(dto.email());
+        aluno.setCpf(dto.cpf());
+
+        alunoRepository.save(aluno);
+
+        return alunoMapper.toDTO(aluno);
+    }
+
+    @Override
+    public void deletarAluno(Long id) {
+        if (!alunoRepository.existsById(id)){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Aluno não encontrado no banco de dados");
+                    "Aluno não encontrado");
         }
 
-        // SE CHEGAR AQUI, SIGNIFICA QUE EXISTE ALUNO COM ESSE ID!
-        // VOU ARMAZENA-LO EM UMA VARIAVEL PARA DEPOIS EDITA-LO.
-        Aluno alunoParaEditar = alunoDoBancoDeDados.get();
-
-        // COM ESSE ALUNO PARA SER EDITADO ACIMA, FAÇO
-        // OS SETS NECESSÁRIOS PARA ATUALIZAR OS ATRIBUTOS DELE
-        alunoParaEditar.setNome(aluno.getNome());
-        alunoParaEditar.setCpf(aluno.getCpf());
-        alunoParaEditar.setEmail(aluno.getEmail());
-
-        // COM O ALUNO TOTALMENTE EDITADO ACIMA
-        // EU DEVOLVO ELE ATUALIZADO PARA O BD
-        alunoRepository.save(alunoParaEditar);
-
+        alunoRepository.deleteById(id);
     }
 }

@@ -16,6 +16,7 @@ public class Aluno {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "nome", nullable = false, length = 250)
     private String nome;
 
     private String cpf;
