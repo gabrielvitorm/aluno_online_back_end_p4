@@ -61,6 +61,7 @@ public class ProfessorServiceImpl implements ProfessorService {
         return professorMapper.toDTO(professorRepository.save(professor));
     }
 
+    @Transactional
     @Override
     public void deletarProfessor(Long id) {
         if (!professorRepository.existsById(id)){
