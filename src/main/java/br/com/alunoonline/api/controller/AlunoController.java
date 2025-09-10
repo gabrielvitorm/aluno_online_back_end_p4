@@ -1,9 +1,11 @@
 package br.com.alunoonline.api.controller;
 
-import br.com.alunoonline.api.model.Aluno;
+import br.com.alunoonline.api.dtos.AlunoRequestDTO;
+import br.com.alunoonline.api.dtos.AlunoResponseDTO;
 import br.com.alunoonline.api.service.AlunoServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,33 +13,36 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/alunos")
+@RequiredArgsConstructor
 public class AlunoController {
-
-    @Autowired
-    AlunoServiceImpl alunoServiceImpl;
+    private final AlunoServiceImpl alunoService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void criarAluno(@RequestBody Aluno aluno) {
-        alunoServiceImpl.criarAluno(aluno);
+    public ResponseEntity<AlunoResponseDTO> criarAluno(@Valid @RequestBody AlunoRequestDTO dto){
+        return ResponseEntity.status(201).body(alunoService.criarAluno(dto));
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<Aluno> listarTodosAlunos(){
-        return alunoServiceImpl.listarTodosAlunos();
+    public ResponseEntity<List<AlunoResponseDTO>> listarAlunos(){
+        return ResponseEntity.ok(alunoService.listarAlunos());
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Optional<Aluno> buscarAlunoPorId(@PathVariable Long id){
-        return alunoServiceImpl.buscarAlunoPorId(id);
+    public ResponseEntity<AlunoResponseDTO> listarAlunoPorId(@PathVariable Long id){
+        return ResponseEntity.ok(alunoService.listarAlunoPorId(id));
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void atualizarAlunoPorId(@PathVariable Long id,
-                                    @RequestBody Aluno aluno) {
-       alunoServiceImpl.atualizarAlunoPorId(id, aluno);
+    public ResponseEntity<AlunoResponseDTO> atualizarAluno(
+            @PathVariable Long id,
+            @RequestBody AlunoRequestDTO dto
+    ){
+        return ResponseEntity.ok(alunoService.atualizarAluno(id, dto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarAluno(@PathVariable Long id){
+        alunoService.deletarAluno(id);
+        return ResponseEntity.noContent().build();
     }
 }

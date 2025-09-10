@@ -5,8 +5,8 @@ import br.com.alunoonline.api.dtos.AlunoResponseDTO;
 import br.com.alunoonline.api.mapper.AlunoMapper;
 import br.com.alunoonline.api.model.Aluno;
 import br.com.alunoonline.api.repository.AlunoRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -46,6 +46,7 @@ public class AlunoServiceImpl implements AlunoService{
         return alunoMapper.toDTO(aluno);
     }
 
+    @Transactional
     @Override
     public AlunoResponseDTO atualizarAluno(Long id, AlunoRequestDTO dto) {
         Aluno aluno = alunoRepository.findById(id)
@@ -61,6 +62,7 @@ public class AlunoServiceImpl implements AlunoService{
         return alunoMapper.toDTO(aluno);
     }
 
+    @Transactional
     @Override
     public void deletarAluno(Long id) {
         if (!alunoRepository.existsById(id)){
