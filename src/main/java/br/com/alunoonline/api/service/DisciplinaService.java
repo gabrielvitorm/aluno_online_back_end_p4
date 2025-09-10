@@ -1,18 +1,19 @@
 package br.com.alunoonline.api.service;
 
-import br.com.alunoonline.api.model.Disciplina;
-import br.com.alunoonline.api.repository.DisciplinaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import br.com.alunoonline.api.dtos.DisciplinaResponseDTO;
+import br.com.alunoonline.api.dtos.DisciplinaResquestDTO;
 
-@Service
-public class DisciplinaService {
+import java.util.List;
 
-    @Autowired
-    DisciplinaRepository disciplinaRepository;
+public interface DisciplinaService {
 
-    public void criarDisciplina(Disciplina disciplina) {
-        disciplinaRepository.save(disciplina);
-    }
+    DisciplinaResponseDTO criarDisciplina(DisciplinaResquestDTO dto);
 
+    List<DisciplinaResponseDTO> listarDisciplinas();
+
+    DisciplinaResponseDTO listarDisciplinaPorId(Long id);
+
+    DisciplinaResponseDTO atualizarDisciplina(Long id, DisciplinaResquestDTO dto);
+
+    void deletarDisciplina(Long id);
 }
