@@ -1,18 +1,16 @@
 package br.com.alunoonline.api.service;
 
-import br.com.alunoonline.api.model.Professor;
-import br.com.alunoonline.api.repository.ProfessorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import br.com.alunoonline.api.dtos.AlunoRequestDTO;
+import br.com.alunoonline.api.dtos.AlunoResponseDTO;
+import br.com.alunoonline.api.dtos.ProfessorRequestDTO;
+import br.com.alunoonline.api.dtos.ProfessorResponseDTO;
 
-@Service
-public class ProfessorService {
+import java.util.List;
 
-    @Autowired
-    ProfessorRepository professorRepository;
-
-    public void criarProfessor(Professor professor) {
-        professorRepository.save(professor);
-    }
-
+public interface ProfessorService {
+    ProfessorResponseDTO criarProfessor(ProfessorRequestDTO dto);
+    List<ProfessorResponseDTO> listarProfessores();
+    ProfessorResponseDTO listarProfessorPorId(Long id);
+    ProfessorResponseDTO atualizarAluno(Long id, ProfessorRequestDTO dto);
+    void deletarProfessor(Long id);
 }
