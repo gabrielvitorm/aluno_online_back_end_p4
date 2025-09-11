@@ -12,7 +12,6 @@ import br.com.alunoonline.api.repository.DisciplinaRepository;
 import br.com.alunoonline.api.repository.MatriculaAlunoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -26,22 +25,22 @@ public class MatriculaAlunoServiceImpl implements MatriculaAlunoService {
     private final MatriculaAlunoRepository matriculaAlunoRepository;
     private final DisciplinaRepository disciplinaRepository;
     private final AlunoRepository alunoRepository;
-    private MatriculaAlunoMapper matriculaAlunoMapper;
+    private final MatriculaAlunoMapper matriculaAlunoMapper;
 
     @Override
     public MatriculaAlunoResponseDTO criarMatricula(MatriculaAlunoRequestDTO dto) {
         MatriculaAluno matriculaAluno = matriculaAlunoMapper.toEntity(dto);
+
         Disciplina disciplina = disciplinaRepository.findById(dto.disciplinaId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Disciplina não encontrada"));
-
-        matriculaAluno.setDisciplina(disciplina);
-
         Aluno aluno = alunoRepository.findById(dto.alunoId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Aluno não encontrado"));
 
+        matriculaAluno.setDisciplina(disciplina);
         matriculaAluno.setAluno(aluno);
+        matriculaAluno.setStatus(MatriculaAlunoStatusEnum.MATRICULADO);
 
         return matriculaAlunoMapper.toDTO(matriculaAlunoRepository.save(matriculaAluno));
     }
@@ -72,15 +71,14 @@ public class MatriculaAlunoServiceImpl implements MatriculaAlunoService {
         Disciplina disciplina = disciplinaRepository.findById(dto.disciplinaId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Disciplina não encontrada"));
-
         Aluno aluno = alunoRepository.findById(dto.alunoId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Aluno não encontrado"));
 
-        matriculaAluno.setAluno(aluno);
+        matriculaAlunoMapper.updateFromDto(dto, matriculaAluno);
+
         matriculaAluno.setDisciplina(disciplina);
-        matriculaAluno.setNota1(dto.nota1());
-        matriculaAluno.setNota2(dto.nota2());
+        matriculaAluno.setAluno(aluno);
 
         return matriculaAlunoMapper.toDTO(matriculaAlunoRepository.save(matriculaAluno));
     }
@@ -96,19 +94,19 @@ public class MatriculaAlunoServiceImpl implements MatriculaAlunoService {
         matriculaAlunoRepository.deleteById(id);
     }
 
+    @Transactional
     @Override
     public MatriculaAlunoResponseDTO atualizarStatusMatrícula(Long id) {
-        MatriculaAluno matriculaAluno = matriculaAlunoRepository.findById(id)
+        MatriculaAluno entity = matriculaAlunoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Matrícula não encontrada"));
 
-        if (matriculaAluno.getStatus().equals(MatriculaAlunoStatusEnum.MATRICULADO)){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
-                    "So pode trancar matricula que não está trancada");
+        if (entity.getStatus() != MatriculaAlunoStatusEnum.MATRICULADO) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                    "Só é possível trancar matrículas com status MATRICULADO");
         }
 
-        matriculaAluno.setStatus(MatriculaAlunoStatusEnum.TRANCADO);
-
-        return matriculaAlunoMapper.toDTO(matriculaAlunoRepository.save(matriculaAluno));
+        entity.setStatus(MatriculaAlunoStatusEnum.TRANCADO);
+        return matriculaAlunoMapper.toDTO(matriculaAlunoRepository.save(entity));
     }
 }

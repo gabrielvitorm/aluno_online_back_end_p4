@@ -5,12 +5,25 @@ import br.com.alunoonline.api.dtos.MatriculaAlunoResponseDTO;
 import br.com.alunoonline.api.model.MatriculaAluno;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface MatriculaAlunoMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "aluno", ignore = true)
+    @Mapping(target = "disciplina", ignore = true)
     MatriculaAluno toEntity(MatriculaAlunoRequestDTO dto);
 
-    MatriculaAlunoResponseDTO toDTO(MatriculaAluno matriculaAluno);
+    @Mapping(target = "alunoId", source = "aluno.id")
+    @Mapping(target = "alunoNome", source = "aluno.nome")
+    @Mapping(target = "disciplinaId", source = "disciplina.id")
+    @Mapping(target = "disciplinaNome", source = "disciplina.nome")
+    @Mapping(target = "matriculaAlunoStatus", source = "status")
+    MatriculaAlunoResponseDTO toDTO(MatriculaAluno entity);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "aluno", ignore = true)
+    @Mapping(target = "disciplina", ignore = true)
+    void updateFromDto(MatriculaAlunoRequestDTO dto, @MappingTarget MatriculaAluno matriculaAluno);
 }

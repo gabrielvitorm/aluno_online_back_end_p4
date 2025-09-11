@@ -2,6 +2,7 @@ package br.com.alunoonline.api.service;
 
 import br.com.alunoonline.api.dtos.MatriculaAlunoRequestDTO;
 import br.com.alunoonline.api.dtos.MatriculaAlunoResponseDTO;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 
