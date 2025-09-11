@@ -33,3 +33,5 @@ build/
 .vscode/
 
 /mysql_data
+
+/src/main/resources/db/migration/V5__seed.sql
