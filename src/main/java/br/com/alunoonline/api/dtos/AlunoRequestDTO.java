@@ -16,4 +16,9 @@ public record AlunoRequestDTO(
         @Email(message = "Email inválido")
         String email
 ) {
+    public AlunoRequestDTO {
+        if (cpf != null) {
+            cpf = cpf.replaceAll("\\D", ""); // remove tudo que não é dígito
+        }
+    }
 }

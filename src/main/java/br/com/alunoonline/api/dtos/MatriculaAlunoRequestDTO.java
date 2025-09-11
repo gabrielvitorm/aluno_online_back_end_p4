@@ -8,14 +8,14 @@ public record MatriculaAlunoRequestDTO(
         @NotNull(message = "Aluno é obrigatório")
         Long alunoId,
 
-        @NotNull(message = "Disciplina é obrigatório")
+        @NotNull(message = "Disciplina é obrigatória")
         Long disciplinaId,
 
         Double nota1,
 
         Double nota2,
 
-        @NotBlank(message = "Status da matrícula é obrigatório")
+        @NotNull(message = "Status da matrícula é obrigatório")
         MatriculaAlunoStatusEnum matriculaAlunoStatus
 ) {
 }
