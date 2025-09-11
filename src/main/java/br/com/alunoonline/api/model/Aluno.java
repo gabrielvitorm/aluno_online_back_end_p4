@@ -19,7 +19,9 @@ public class Aluno {
     @Column(name = "nome", nullable = false, length = 250)
     private String nome;
 
+    @Column(name = "cpf", length = 14, unique = true)
     private String cpf;
 
+    @Column(name = "email", length = 250, unique = true)
     private String email;
 }

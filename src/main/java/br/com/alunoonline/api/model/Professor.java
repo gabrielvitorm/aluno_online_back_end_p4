@@ -16,9 +16,12 @@ public class Professor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "nome", nullable = false, length = 250)
     private String nome;
 
+    @Column(name = "email", length = 250, unique = true)
     private String email;
 
+    @Column(name = "cpf", length = 14, unique = true)
     private String cpf;
 }
