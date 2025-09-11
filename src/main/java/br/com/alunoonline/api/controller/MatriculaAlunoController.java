@@ -44,7 +44,7 @@ public class MatriculaAlunoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarMatricula(Long id) {
+    public ResponseEntity<Void> deletarMatricula(@PathVariable Long id) {
         matriculaAlunoService.deletarMatricula(id);
 
         return ResponseEntity.noContent().build();
