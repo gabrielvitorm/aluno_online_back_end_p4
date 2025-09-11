@@ -9,9 +9,12 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface DisciplinaMapper {
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "professor", ignore = true)
     Disciplina toEntity(DisciplinaResquestDTO dto);
 
+    @Mapping(target = "professorId", source = "professor.id")
+    @Mapping(target = "professorNome", source = "professor.nome")
     DisciplinaResponseDTO toDTO(Disciplina disciplina);
 
 
