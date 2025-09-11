@@ -49,7 +49,7 @@ public class ProfessorServiceImpl implements ProfessorService {
 
     @Transactional
     @Override
-    public ProfessorResponseDTO atualizarAluno(
+    public ProfessorResponseDTO atualizarProfessor(
             Long id,
             ProfessorRequestDTO dto) {
         Professor professor = professorRepository.findById(id)
