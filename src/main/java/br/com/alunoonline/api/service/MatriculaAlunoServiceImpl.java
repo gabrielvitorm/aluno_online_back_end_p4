@@ -81,7 +81,6 @@ public class MatriculaAlunoServiceImpl implements MatriculaAlunoService {
         matriculaAluno.setDisciplina(disciplina);
         matriculaAluno.setNota1(dto.nota1());
         matriculaAluno.setNota2(dto.nota2());
-        matriculaAluno.setStatus(dto.matriculaAlunoStatus());
 
         return matriculaAlunoMapper.toDTO(matriculaAlunoRepository.save(matriculaAluno));
     }

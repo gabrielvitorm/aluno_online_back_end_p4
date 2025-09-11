@@ -13,9 +13,6 @@ public record MatriculaAlunoRequestDTO(
 
         Double nota1,
 
-        Double nota2,
-
-        @NotNull(message = "Status da matrícula é obrigatório")
-        MatriculaAlunoStatusEnum matriculaAlunoStatus
+        Double nota2
 ) {
 }
