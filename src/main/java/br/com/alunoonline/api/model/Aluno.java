@@ -1,5 +1,6 @@
 package br.com.alunoonline.api.model;
 
+import br.com.alunoonline.api.enums.SituacaoAlunoEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,4 +25,8 @@ public class Aluno {
 
     @Column(name = "email", length = 250, unique = true)
     private String email;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "situacao", length = 30)
+    private SituacaoAlunoEnum situacaoAlunoEnum;
 }

@@ -2,6 +2,7 @@ package br.com.alunoonline.api.service;
 
 import br.com.alunoonline.api.dtos.AlunoRequestDTO;
 import br.com.alunoonline.api.dtos.AlunoResponseDTO;
+import br.com.alunoonline.api.enums.SituacaoAlunoEnum;
 import br.com.alunoonline.api.mapper.AlunoMapper;
 import br.com.alunoonline.api.model.Aluno;
 import br.com.alunoonline.api.repository.AlunoRepository;
@@ -24,6 +25,8 @@ public class AlunoServiceImpl implements AlunoService{
     @Override
     public AlunoResponseDTO criarAluno(AlunoRequestDTO dto) {
         Aluno aluno = alunoMapper.toEntity(dto);
+
+        aluno.setSituacaoAlunoEnum(SituacaoAlunoEnum.ATIVO);
 
         alunoRepository.save(aluno);
 
