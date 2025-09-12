@@ -2,7 +2,7 @@ package br.com.alunoonline.api.service;
 
 import br.com.alunoonline.api.dtos.MatriculaAlunoRequestDTO;
 import br.com.alunoonline.api.dtos.MatriculaAlunoResponseDTO;
-import jakarta.transaction.Transactional;
+import br.com.alunoonline.api.dtos.NotasMatriculaAlunoDTO;
 
 import java.util.List;
 
@@ -19,4 +19,6 @@ public interface MatriculaAlunoService {
     void deletarMatricula(Long id);
 
     MatriculaAlunoResponseDTO atualizarStatusMatrícula(Long id);
+
+    MatriculaAlunoResponseDTO atualizarNotas(Long id, NotasMatriculaAlunoDTO dto);
 }

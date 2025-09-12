@@ -2,6 +2,7 @@ package br.com.alunoonline.api.service;
 
 import br.com.alunoonline.api.dtos.MatriculaAlunoRequestDTO;
 import br.com.alunoonline.api.dtos.MatriculaAlunoResponseDTO;
+import br.com.alunoonline.api.dtos.NotasMatriculaAlunoDTO;
 import br.com.alunoonline.api.enums.MatriculaAlunoStatusEnum;
 import br.com.alunoonline.api.mapper.MatriculaAlunoMapper;
 import br.com.alunoonline.api.model.Aluno;
@@ -86,7 +87,7 @@ public class MatriculaAlunoServiceImpl implements MatriculaAlunoService {
     @Transactional
     @Override
     public void deletarMatricula(Long id) {
-        if (!matriculaAlunoRepository.existsById(id)){
+        if (!matriculaAlunoRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "Matrícula não encontrada");
         }
@@ -108,5 +109,28 @@ public class MatriculaAlunoServiceImpl implements MatriculaAlunoService {
 
         entity.setStatus(MatriculaAlunoStatusEnum.TRANCADO);
         return matriculaAlunoMapper.toDTO(matriculaAlunoRepository.save(entity));
+    }
+
+    @Override
+    public MatriculaAlunoResponseDTO atualizarNotas(Long id, NotasMatriculaAlunoDTO dto) {
+        MatriculaAluno matriculaAluno = matriculaAlunoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Matrícula não encontrada"));
+
+        if (dto.nota1() == null || dto.nota2() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "As duas notas são obrigatórias!");
+        }
+
+        matriculaAluno.setNota1(dto.nota1());
+        matriculaAluno.setNota2(dto.nota2());
+
+        double media = (dto.nota1() + dto.nota2()) / 2.0;
+        matriculaAluno.setStatus(media >= 7.0 ? MatriculaAlunoStatusEnum.APROVADO
+                : MatriculaAlunoStatusEnum.REPROVADO);
+
+        matriculaAlunoRepository.save(matriculaAluno);
+
+        return matriculaAlunoMapper.toDTO(matriculaAluno);
     }
 }

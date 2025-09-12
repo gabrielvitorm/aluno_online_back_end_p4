@@ -2,6 +2,7 @@ package br.com.alunoonline.api.controller;
 
 import br.com.alunoonline.api.dtos.MatriculaAlunoRequestDTO;
 import br.com.alunoonline.api.dtos.MatriculaAlunoResponseDTO;
+import br.com.alunoonline.api.dtos.NotasMatriculaAlunoDTO;
 import br.com.alunoonline.api.service.MatriculaAlunoServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -59,5 +60,14 @@ public class MatriculaAlunoController {
     @Operation(summary = "Atualizar Status da Matrícula", description = "Atualiza apenas o status de uma matrícula")
     public ResponseEntity<MatriculaAlunoResponseDTO> atualizarStatusMatricula(@PathVariable Long id) {
         return ResponseEntity.ok(matriculaAlunoService.atualizarStatusMatrícula(id));
+    }
+
+    @PatchMapping("/atualizar-notas/{id}")
+    @Operation(summary = "Atualizar Notas da Matrícula", description = "Atualiza as notas do Aluno e também atualiza o status para aprovado ou reprovado")
+    public ResponseEntity<MatriculaAlunoResponseDTO> atualizarNotas(
+            @PathVariable Long id,
+            @Valid @RequestBody NotasMatriculaAlunoDTO dto
+    ) {
+        return ResponseEntity.ok(matriculaAlunoService.atualizarNotas(id, dto));
     }
 }

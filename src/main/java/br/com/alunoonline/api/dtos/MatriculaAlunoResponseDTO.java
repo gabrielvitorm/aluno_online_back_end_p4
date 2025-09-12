@@ -10,6 +10,7 @@ public record MatriculaAlunoResponseDTO(
         String disciplinaNome,
         Double nota1,
         Double nota2,
-        String matriculaAlunoStatus
+        String matriculaAlunoStatus,
+        Double media
 ) {
 }

@@ -20,6 +20,9 @@ public interface MatriculaAlunoMapper {
     @Mapping(target = "disciplinaId", source = "disciplina.id")
     @Mapping(target = "disciplinaNome", source = "disciplina.nome")
     @Mapping(target = "matriculaAlunoStatus", source = "status")
+    @Mapping(target = "media",
+            expression = "java( (entity.getNota1() != null && entity.getNota2() != null) ? " +
+                    "(entity.getNota1() + entity.getNota2()) / 2 : null )")
     MatriculaAlunoResponseDTO toDTO(MatriculaAluno entity);
 
     @Mapping(target = "id", ignore = true)

@@ -9,10 +9,6 @@ public record MatriculaAlunoRequestDTO(
         Long alunoId,
 
         @NotNull(message = "Disciplina é obrigatória")
-        Long disciplinaId,
-
-        Double nota1,
-
-        Double nota2
+        Long disciplinaId
 ) {
 }
