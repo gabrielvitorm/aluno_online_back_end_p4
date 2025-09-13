@@ -2,7 +2,7 @@ package br.com.alunoonline.api.controller;
 
 import br.com.alunoonline.api.dtos.DisciplinaResponseDTO;
 import br.com.alunoonline.api.dtos.DisciplinaResquestDTO;
-import br.com.alunoonline.api.service.DisciplinaServiceImpl;
+import br.com.alunoonline.api.service.DisciplinaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -18,7 +18,7 @@ import java.util.List;
 @Tag(name = "Disciplinas", description = "Gerenciamento de disciplinas")
 public class DisciplinaController {
 
-    private final DisciplinaServiceImpl disciplinaService;
+    private final DisciplinaService disciplinaService;
 
     @PostMapping
     @Operation(summary = "Cadastrar Disciplina", description = "Cria uma nova disciplina no sistema")

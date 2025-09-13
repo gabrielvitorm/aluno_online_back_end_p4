@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -67,12 +66,14 @@ public class AlunoServiceImpl implements AlunoService{
 
     @Transactional
     @Override
-    public void deletarAluno(Long id) {
-        if (!alunoRepository.existsById(id)){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Aluno não encontrado");
-        }
+    public AlunoResponseDTO deletarAluno(Long id) {
 
-        alunoRepository.deleteById(id);
+        Aluno aluno = alunoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Aluno não encontrado"));
+
+        aluno.setSituacaoAlunoEnum(SituacaoAlunoEnum.DESATIVADO);
+
+        return alunoMapper.toDTO(alunoRepository.save(aluno));
     }
 }

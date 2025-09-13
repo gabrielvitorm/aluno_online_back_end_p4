@@ -11,5 +11,5 @@ public interface AlunoService {
     List<AlunoResponseDTO> listarAlunos();
     AlunoResponseDTO listarAlunoPorId(Long id);
     AlunoResponseDTO atualizarAluno(Long id, AlunoRequestDTO dto);
-    void deletarAluno(Long id);
+    AlunoResponseDTO deletarAluno(Long id);
 }

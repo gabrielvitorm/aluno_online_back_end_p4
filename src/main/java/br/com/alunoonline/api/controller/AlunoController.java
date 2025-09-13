@@ -2,7 +2,7 @@ package br.com.alunoonline.api.controller;
 
 import br.com.alunoonline.api.dtos.AlunoRequestDTO;
 import br.com.alunoonline.api.dtos.AlunoResponseDTO;
-import br.com.alunoonline.api.service.AlunoServiceImpl;
+import br.com.alunoonline.api.service.AlunoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -18,7 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Tag(name = "Alunos", description = "Gerenciamento de alunos")
 public class AlunoController {
-    private final AlunoServiceImpl alunoService;
+    private final AlunoService alunoService;
 
     @PostMapping
     @Operation(summary = "Cadastrar Aluno", description = "Cria um novo aluno no sistema")
@@ -49,8 +49,7 @@ public class AlunoController {
 
     @Operation(summary = "Deletar Aluno", description = "Deleta uma aluno cadastrado no sistema")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarAluno(@PathVariable Long id){
-        alunoService.deletarAluno(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<AlunoResponseDTO> deletarAluno(@PathVariable Long id){
+        return ResponseEntity.ok(alunoService.deletarAluno(id));
     }
 }

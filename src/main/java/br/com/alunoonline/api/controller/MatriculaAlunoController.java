@@ -3,7 +3,7 @@ package br.com.alunoonline.api.controller;
 import br.com.alunoonline.api.dtos.MatriculaAlunoRequestDTO;
 import br.com.alunoonline.api.dtos.MatriculaAlunoResponseDTO;
 import br.com.alunoonline.api.dtos.NotasMatriculaAlunoDTO;
-import br.com.alunoonline.api.service.MatriculaAlunoServiceImpl;
+import br.com.alunoonline.api.service.MatriculaAlunoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -19,7 +19,7 @@ import java.util.List;
 @Tag(name = "Matrículas", description = "Gerenciamento das matrículas dos alunos")
 public class MatriculaAlunoController {
 
-    private final MatriculaAlunoServiceImpl matriculaAlunoService;
+    private final MatriculaAlunoService matriculaAlunoService;
 
     @PostMapping
     @Operation(summary = "Cadastrar Matrícula", description = "Cria uma nova matrícula para um aluno em uma disciplina")

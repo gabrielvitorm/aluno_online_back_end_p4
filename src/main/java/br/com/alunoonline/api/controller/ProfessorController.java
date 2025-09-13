@@ -2,7 +2,7 @@ package br.com.alunoonline.api.controller;
 
 import br.com.alunoonline.api.dtos.ProfessorRequestDTO;
 import br.com.alunoonline.api.dtos.ProfessorResponseDTO;
-import br.com.alunoonline.api.service.ProfessorServiceImpl;
+import br.com.alunoonline.api.service.ProfessorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -18,7 +18,7 @@ import java.util.List;
 @Tag(name = "Professores", description = "Gerenciamento de professores")
 public class ProfessorController {
 
-    private final ProfessorServiceImpl professorService;
+    private final ProfessorService professorService;
 
     @PostMapping
     @Operation(summary = "Cadastrar Professor", description = "Cria um novo professor no sistema")
