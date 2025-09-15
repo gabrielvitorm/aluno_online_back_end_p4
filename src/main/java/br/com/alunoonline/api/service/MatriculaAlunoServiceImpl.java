@@ -32,15 +32,8 @@ public class MatriculaAlunoServiceImpl implements MatriculaAlunoService {
     public MatriculaAlunoResponseDTO criarMatricula(MatriculaAlunoRequestDTO dto) {
         MatriculaAluno matriculaAluno = matriculaAlunoMapper.toEntity(dto);
 
-        Disciplina disciplina = disciplinaRepository.findById(dto.disciplinaId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Disciplina não encontrada"));
-        Aluno aluno = alunoRepository.findById(dto.alunoId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Aluno não encontrado"));
-
-        matriculaAluno.setDisciplina(disciplina);
-        matriculaAluno.setAluno(aluno);
+        matriculaAluno.setDisciplina(buscarDisciplina(dto.disciplinaId()));
+        matriculaAluno.setAluno(buscarAluno(dto.alunoId()));
         matriculaAluno.setStatus(MatriculaAlunoStatusEnum.MATRICULADO);
 
         return matriculaAlunoMapper.toDTO(matriculaAlunoRepository.save(matriculaAluno));
@@ -69,17 +62,10 @@ public class MatriculaAlunoServiceImpl implements MatriculaAlunoService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Matrícula não encontrada"));
 
-        Disciplina disciplina = disciplinaRepository.findById(dto.disciplinaId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Disciplina não encontrada"));
-        Aluno aluno = alunoRepository.findById(dto.alunoId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Aluno não encontrado"));
-
         matriculaAlunoMapper.updateFromDto(dto, matriculaAluno);
 
-        matriculaAluno.setDisciplina(disciplina);
-        matriculaAluno.setAluno(aluno);
+        matriculaAluno.setDisciplina(buscarDisciplina(dto.disciplinaId()));
+        matriculaAluno.setAluno(buscarAluno(dto.alunoId()));
 
         return matriculaAlunoMapper.toDTO(matriculaAlunoRepository.save(matriculaAluno));
     }
@@ -132,5 +118,17 @@ public class MatriculaAlunoServiceImpl implements MatriculaAlunoService {
         matriculaAlunoRepository.save(matriculaAluno);
 
         return matriculaAlunoMapper.toDTO(matriculaAluno);
+    }
+
+    private Disciplina buscarDisciplina(Long id){
+        return disciplinaRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Disciplina não encontrada"));
+    }
+
+    private Aluno buscarAluno(Long id) {
+        return alunoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Aluno não encontrado"));
     }
 }
