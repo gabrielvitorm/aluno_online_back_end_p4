@@ -27,11 +27,8 @@ public class DisciplinaServiceImpl implements DisciplinaService {
     @Override
     public DisciplinaResponseDTO criarDisciplina(DisciplinaResquestDTO dto) {
         Disciplina disciplina = disciplinaMapper.toEntity(dto);
-        Professor professor = professorRepository.findById(dto.professorId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Professor não encontrado"));
 
-        disciplina.setProfessor(professor);
+        disciplina.setProfessor(buscarProfessor(dto.professorId()));
 
         return disciplinaMapper.toDTO(disciplinaRepository.save(disciplina));
     }
@@ -59,13 +56,9 @@ public class DisciplinaServiceImpl implements DisciplinaService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Disciplina não encontrada"));
 
-        Professor professor = professorRepository.findById(dto.professorId())
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                "Professor não encontrado"));
-
         disciplina.setNome(dto.nome());
         disciplina.setCargaHoraria(dto.cargaHoraria());
-        disciplina.setProfessor(professor);
+        disciplina.setProfessor(buscarProfessor(dto.professorId()));
 
         return disciplinaMapper.toDTO(disciplinaRepository.save(disciplina));
     }
@@ -79,5 +72,11 @@ public class DisciplinaServiceImpl implements DisciplinaService {
         }
 
         disciplinaRepository.deleteById(id);
+    }
+
+    private Professor buscarProfessor(Long id){
+         return professorRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Professor não encontrado"));
     }
 }
