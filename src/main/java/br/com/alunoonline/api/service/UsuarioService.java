@@ -2,6 +2,7 @@ package br.com.alunoonline.api.service;
 
 import br.com.alunoonline.api.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,6 +16,12 @@ public class UsuarioService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+        return usuarioRepository.findByUsername(username)
+                .map(usuario -> User.builder()
+                        .username(usuario.getUsername())
+                        .password(usuario.getPassword())
+                        .roles(usuario.getRole().name())
+                        .build())
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
     }
 }
