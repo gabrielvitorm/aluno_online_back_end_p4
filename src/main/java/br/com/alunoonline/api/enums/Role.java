@@ -1,6 +1,6 @@
 package br.com.alunoonline.api.enums;
 
-public enum Roles {
+public enum Role {
     COORDENADOR,
     PROFESSOR,
     ALUNO

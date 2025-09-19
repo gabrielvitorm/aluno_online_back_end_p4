@@ -1,0 +1,31 @@
+package br.com.alunoonline.api.model;
+
+import br.com.alunoonline.api.enums.Role;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "usuario")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Usuario {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "email", unique = true)
+    private String email;
+
+    @Column(name = "username", unique = true)
+    private String username;
+
+    @Column(name = "password")
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+}
