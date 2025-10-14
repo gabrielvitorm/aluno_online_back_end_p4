@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class MatriculaAlunoController {
 
     @PostMapping
     @Operation(summary = "Cadastrar Matrícula", description = "Cria uma nova matrícula para um aluno em uma disciplina")
+    @PreAuthorize("hasAnyRole('COORDENADOR', 'ALUNO')")
     public ResponseEntity<MatriculaAlunoResponseDTO> criarMatricula(
             @Valid @RequestBody MatriculaAlunoRequestDTO dto) {
         return ResponseEntity.status(201).body(matriculaAlunoService.criarMatricula(dto));
@@ -30,18 +32,21 @@ public class MatriculaAlunoController {
 
     @GetMapping
     @Operation(summary = "Listar Matrículas", description = "Lista todas as matrículas cadastradas no sistema")
+    @PreAuthorize("hasAnyRole('COORDENADOR', 'PROFESSOR')")
     public ResponseEntity<List<MatriculaAlunoResponseDTO>> listarMatriculas() {
         return ResponseEntity.ok(matriculaAlunoService.listarMatriculas());
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Buscar Matrícula por Id", description = "Busca uma matrícula pelo Id cadastrado no sistema")
+    @PreAuthorize("hasAnyRole('COORDENADOR', 'PROFESSOR')")
     public ResponseEntity<MatriculaAlunoResponseDTO> listarMatriculaPorId(@PathVariable Long id) {
         return ResponseEntity.ok(matriculaAlunoService.listarMatriculaPorId(id));
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar Matrícula", description = "Atualiza os dados de uma matrícula existente")
+    @PreAuthorize("hasAnyRole('COORDENADOR', 'PROFESSOR')")
     public ResponseEntity<MatriculaAlunoResponseDTO> atualizarMatriculaPorId(
             @PathVariable Long id,
             @Valid @RequestBody MatriculaAlunoRequestDTO dto
@@ -51,6 +56,7 @@ public class MatriculaAlunoController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Deletar Matrícula", description = "Remove uma matrícula cadastrada no sistema")
+    @PreAuthorize("hasRole('COORDENADOR')")
     public ResponseEntity<Void> deletarMatricula(@PathVariable Long id) {
         matriculaAlunoService.deletarMatricula(id);
         return ResponseEntity.noContent().build();
@@ -58,12 +64,14 @@ public class MatriculaAlunoController {
 
     @PatchMapping("/atualizar-status/{id}")
     @Operation(summary = "Atualizar Status da Matrícula", description = "Atualiza apenas o status de uma matrícula")
+    @PreAuthorize("hasAnyRole('COORDENADOR', 'PROFESSOR')")
     public ResponseEntity<MatriculaAlunoResponseDTO> atualizarStatusMatricula(@PathVariable Long id) {
         return ResponseEntity.ok(matriculaAlunoService.atualizarStatusMatrícula(id));
     }
 
     @PatchMapping("/atualizar-notas/{id}")
     @Operation(summary = "Atualizar Notas da Matrícula", description = "Atualiza as notas do Aluno e também atualiza o status para aprovado ou reprovado")
+    @PreAuthorize("hasAnyRole('COORDENADOR', 'PROFESSOR')")
     public ResponseEntity<MatriculaAlunoResponseDTO> atualizarNotas(
             @PathVariable Long id,
             @Valid @RequestBody NotasMatriculaAlunoDTO dto

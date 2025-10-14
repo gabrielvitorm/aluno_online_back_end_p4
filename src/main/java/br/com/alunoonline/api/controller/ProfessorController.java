@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,24 +23,28 @@ public class ProfessorController {
 
     @PostMapping
     @Operation(summary = "Cadastrar Professor", description = "Cria um novo professor no sistema")
+    @PreAuthorize("hasRole('COORDENADOR')")
     public ResponseEntity<ProfessorResponseDTO> criarProfessor(@Valid @RequestBody ProfessorRequestDTO dto){
         return ResponseEntity.status(201).body(professorService.criarProfessor(dto));
     }
 
     @GetMapping
     @Operation(summary = "Listar Professores", description = "Lista todos os professores cadastrados")
+    @PreAuthorize("hasRole('COORDENADOR')")
     public ResponseEntity<List<ProfessorResponseDTO>> listarProfessores(){
         return ResponseEntity.ok(professorService.listarProfessores());
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Buscar Professor por Id", description = "Busca um professor pelo Id cadastrado no sistema")
+    @PreAuthorize("hasAnyRole('COORDENADOR', 'PROFESSOR')")
     public ResponseEntity<ProfessorResponseDTO> listarProfessorPorId(@PathVariable Long id){
         return ResponseEntity.ok(professorService.listarProfessorPorId(id));
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar Professor", description = "Atualiza os dados de um professor cadastrado")
+    @PreAuthorize("hasRole('COORDENADOR')")
     public ResponseEntity<ProfessorResponseDTO> atualizarProfessor(
             @PathVariable Long id,
             @Valid @RequestBody ProfessorRequestDTO dto){
@@ -48,6 +53,7 @@ public class ProfessorController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Deletar Professor", description = "Remove um professor cadastrado no sistema")
+    @PreAuthorize("hasRole('COORDENADOR')")
     public ResponseEntity<Void> deletarProfessor(@PathVariable Long id){
         professorService.deletarProfessor(id);
         return ResponseEntity.noContent().build();

@@ -23,12 +23,14 @@ public class AlunoController {
 
     @PostMapping
     @Operation(summary = "Cadastrar Aluno", description = "Cria um novo aluno no sistema")
+    @PreAuthorize("hasRole('COORDENADOR')")
     public ResponseEntity<AlunoResponseDTO> criarAluno(@Valid @RequestBody AlunoRequestDTO dto){
         return ResponseEntity.status(201).body(alunoService.criarAluno(dto));
     }
 
     @GetMapping
     @Operation(summary = "Listar Alunos", description = "Lista todos os alunos do sistema")
+    @PreAuthorize("hasRole('COORDENADOR')")
     public ResponseEntity<List<AlunoResponseDTO>> listarAlunos(){
         return ResponseEntity.ok(alunoService.listarAlunos());
     }
@@ -40,6 +42,7 @@ public class AlunoController {
     }
 
     @Operation(summary = "Atualizar Aluno", description = "Atualiza um aluno cadastrado no sistema")
+    @PreAuthorize("hasAnyRole('COORDENADOR', 'ALUNO')")
     @PutMapping("/{id}")
     public ResponseEntity<AlunoResponseDTO> atualizarAluno(
             @PathVariable Long id,
@@ -50,6 +53,7 @@ public class AlunoController {
 
     @Operation(summary = "Deletar Aluno", description = "Deleta uma aluno cadastrado no sistema")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('COORDENADOR')")
     public ResponseEntity<AlunoResponseDTO> deletarAluno(@PathVariable Long id){
         return ResponseEntity.ok(alunoService.deletarAluno(id));
     }
